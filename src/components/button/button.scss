@@ -1,39 +1,43 @@
+@use '../../style/color';
+@use '../../style/size';
+@use '../../style/space';
+
 .button {
-  background: var(--color--ink);
-  border-radius: var(--size--corner);
+  background: color.$ink;
+  border-radius: size.$corner;
   border: 0;
-  color: var(--color--card);
+  color: color.$card;
   cursor: pointer;
   font: inherit;
   font-weight: bold;
-  height: var(--size--button);
+  height: size.$button;
   line-height: 1;
-  padding: 0 var(--space--big);
+  padding: 0 space.$big;
 
   &--rating {
-    border-radius: var(--size--button);
-    font-size: var(--size--icon);
-    padding: 0 0 var(--space--tiny);
-    width: var(--size--button);
+    border-radius: size.$button;
+    font-size: size.$icon;
+    padding: 0 0 space.$tiny;
+    width: size.$button;
   }
 
   &--no {
-    background: var(--color--no);
+    background: color.$no;
   }
 
   &--negative {
-    background: var(--color--negative);
+    background: color.$negative;
   }
 
   &--neutral {
-    background: var(--color--neutral);
+    background: color.$neutral;
   }
 
   &--positive {
-    background: var(--color--positive);
+    background: color.$positive;
   }
 
   &--yes {
-    background: var(--color--yes);
+    background: color.$yes;
   }
 }

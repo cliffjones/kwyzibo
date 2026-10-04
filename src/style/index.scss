@@ -1,0 +1,56 @@
+@use "color";
+@use "size";
+@use "space";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: color.$desk;
+  color: color.$ink;
+}
+
+p,
+h1 {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: space.$huge;
+  margin: 0 auto;
+  padding-bottom: space.$big;
+  width: min(600px, 90%);
+}
+
+.header {
+  text-align: center;
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  p {
+    color: color.$pencil;
+  }
+}
+
+.footer {
+  color: color.$pencil;
+  text-align: center;
+}
+
+.message {
+  color: color.$pencil;
+  font-size: 1.5rem;
+}

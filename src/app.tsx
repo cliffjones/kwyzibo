@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 
-import './app.scss';
+import './style/index.scss';
 import { Button } from './components/button/button';
 import { ButtonSet } from './components/button-set/button-set';
 import { Card } from './components/card/card';

@@ -1,10 +1,14 @@
+@use '../../style/color';
+@use '../../style/size';
+@use '../../style/space';
+
 .card {
-  background: var(--color--card);
-  border-radius: var(--size--corner);
-  box-shadow: 0 var(--space--small) var(--size--shadow) var(--color--shadow);
+  background: color.$card;
+  border-radius: size.$corner;
+  box-shadow: 0 space.$small size.$shadow color.$shadow;
   display: flex;
   flex-direction: column;
-  gap: var(--space--big);
-  padding: var(--space--big);
+  gap: space.$big;
+  padding: space.$big;
   text-align: center;
 }
