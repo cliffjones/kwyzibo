@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import './button-set.scss';
+import './style.scss';
 
 type ButtonSetProps = {
   children: ReactNode;

@@ -1,25 +1,14 @@
-import type { QuizItem } from './types';
-
-const DATA_PATH = '/data/';
-
-type QuizManifest = {
-  files: string[];
-};
-
-type QuizData = {
-  question: string;
-  answer: string;
-  topic?: string;
-};
+import { DATA_PATH } from './constants';
+import type { QuizItem, QuizManifest, QuizData } from './types';
 
 export const loadItems = async (): Promise<QuizItem[]> => {
   const manifestResponse = await fetch(`${DATA_PATH}index.json`);
   if (!manifestResponse.ok) {
-    throw new Error(`Unable to load question manifest: ${manifestResponse.status}`);
+    throw new Error(`Unable to load quiz manifest: ${manifestResponse.status}`);
   }
 
   const manifest = await manifestResponse.json() as QuizManifest;
-  const questionGroups = await Promise.all(
+  const itemGroups = await Promise.all(
     manifest.files.map(async file => {
       const response = await fetch(`${DATA_PATH}${encodeURIComponent(file)}`);
       if (!response.ok) {
@@ -30,10 +19,10 @@ export const loadItems = async (): Promise<QuizItem[]> => {
     })
   );
 
-  return questionGroups.flat().map((question, index) => ({
-    ...question,
+  return itemGroups.flat().map((item, index) => ({
+    ...item,
     id: index + 1,
-    topic: question?.topic ?? '',
+    topic: item?.topic ?? '',
     confidence: 0
   }));
 };

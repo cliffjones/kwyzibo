@@ -2,17 +2,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 
 import './style/index.scss';
-import { Button } from './components/button/button';
-import { ButtonSet } from './components/button-set/button-set';
-import { Card } from './components/card/card';
-import { CONFIDENCE_RATINGS } from './constants';
+import { Button } from './components/button';
+import { ButtonSet } from './components/button-set';
+import { Card } from './components/card';
+import { Confidence } from './components/confidence';
 import { rateConfidence, restart } from './store';
 import type { RootState, AppDispatch } from './store';
 
 export const App = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const questionCount = useSelector((state: RootState) => state.kwyzibo.items.length);
+  const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
 
   const remainingIds = useSelector((state: RootState) => state.kwyzibo.remainingIds);
 
@@ -20,9 +20,13 @@ export const App = () => {
 
   const [revealed, setRevealed] = useState(false);
 
-  const currentCard = useSelector((state: RootState) =>
-    state.kwyzibo.items.find(question => question.id === currentId)
+  const currentItem = useSelector((state: RootState) =>
+    state.kwyzibo.items.find(item => item.id === currentId)
   );
+
+  const handleReveal = () => {
+    setRevealed(true);
+  };
 
   const handleRating = (rating: number) => {
     setRevealed(false);
@@ -34,8 +38,8 @@ export const App = () => {
     dispatch(restart());
   };
 
-  let remainingMessage = `${questionCount} card${questionCount === 1 ? '' : 's'}`;
-  if (remainingIds.length === questionCount) {
+  let remainingMessage = `${itemCount} card${itemCount === 1 ? '' : 's'}`;
+  if (remainingIds.length === itemCount) {
     remainingMessage = `${remainingMessage} loaded`;
   } else {
     remainingMessage = `${remainingIds.length} of ${remainingMessage} remaining`;
@@ -48,45 +52,18 @@ export const App = () => {
         <p>{remainingMessage}</p>
       </header>
 
-      {remainingIds.length && currentCard ? (<>
-        <Card topic={currentCard.topic} content={currentCard.question}>
+      {remainingIds.length && currentItem ? (<>
+        <Card topic={currentItem.topic} content={currentItem.question}>
           {!revealed ? (
             <ButtonSet>
-              <Button onClick={() => setRevealed(true)}>▼ Reveal</Button>
+              <Button onClick={handleReveal}>▼ Reveal</Button>
             </ButtonSet>
           ) : null}
         </Card>
 
         {revealed && (
-          <Card content={currentCard.answer}>
-            <ButtonSet>
-              Got it?
-              <Button
-                className="button--rating button--no"
-                onClick={() => handleRating(1)}
-                title={CONFIDENCE_RATINGS[0].label}
-              >{CONFIDENCE_RATINGS[0].icon}</Button>
-              <Button
-                className="button--rating button--negative"
-                onClick={() => handleRating(2)}
-                title={CONFIDENCE_RATINGS[1].label}
-              >{CONFIDENCE_RATINGS[1].icon}</Button>
-              <Button
-                className="button--rating button--neutral"
-                onClick={() => handleRating(3)}
-                title={CONFIDENCE_RATINGS[2].label}
-              >{CONFIDENCE_RATINGS[2].icon}</Button>
-              <Button
-                className="button--rating button--positive"
-                onClick={() => handleRating(4)}
-                title={CONFIDENCE_RATINGS[3].label}
-              >{CONFIDENCE_RATINGS[3].icon}</Button>
-              <Button
-                className="button--rating button--yes"
-                onClick={() => handleRating(5)}
-                title={CONFIDENCE_RATINGS[4].label}
-              >{CONFIDENCE_RATINGS[4].icon}</Button>
-            </ButtonSet>
+          <Card content={currentItem.answer}>
+            <Confidence handleRating={handleRating} />
           </Card>
         )}
       </>) : (

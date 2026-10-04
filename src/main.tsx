@@ -4,7 +4,7 @@ import { StrictMode } from 'react';
 
 import { App } from './app';
 import { createAppStore } from './store';
-import { loadItems } from './data';
+import { loadItems } from './store/load-items';
 
 const root = createRoot(document.getElementById('root')!);
 

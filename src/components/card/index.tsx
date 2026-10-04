@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import './card.scss';
+import './style.scss';
 import { getTextSize } from './get-text-size';
 
 type CardProps = {
