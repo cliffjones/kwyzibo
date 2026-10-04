@@ -4,9 +4,10 @@ import { CONFIDENCE_RATINGS } from './constants';
 
 type ConfidenceProps = {
   handleRating: (rating: number) => void;
+  confirmReset?: () => void;
 };
 
-export const Confidence = ({ handleRating }: ConfidenceProps) => (
+export const Confidence = ({ handleRating, confirmReset }: ConfidenceProps) => (
   <ButtonSet>
     Got it?
     <Button
@@ -34,5 +35,9 @@ export const Confidence = ({ handleRating }: ConfidenceProps) => (
       onClick={() => handleRating(5)}
       title={CONFIDENCE_RATINGS[4].label}
     >{CONFIDENCE_RATINGS[4].icon}</Button>
+
+    {confirmReset && (
+      <Button className="button--secondary" onClick={confirmReset} title="Reset">⭯</Button>
+    )}
   </ButtonSet>
 );

@@ -12,7 +12,13 @@
   font-weight: bold;
   height: size.$button;
   line-height: 1;
-  padding: 0 space.$big;
+  padding: 0 space.$mid;
+
+  &--secondary {
+    background: none;
+    color: color.$pencil;
+    padding: 0 space.$small;
+  }
 
   &--rating {
     border-radius: size.$button;

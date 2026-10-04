@@ -10,7 +10,7 @@ type KwyziboState = {
 };
 
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
-export const restart = createAction('kwyzibo/restart');
+export const reset = createAction('kwyzibo/reset');
 
 const createKwyziboReducer = (items: QuizItem[]) => {
   const initialIds = items.map(question => question.id);
@@ -58,7 +58,7 @@ const createKwyziboReducer = (items: QuizItem[]) => {
           state.currentId
         );
       })
-      .addCase(restart, state => {
+      .addCase(reset, state => {
         state.remainingIds = [...initialIds];
         state.currentId = initialIds.length
           ? getRandomId(initialIds, state.items)
