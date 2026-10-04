@@ -1,24 +1,15 @@
 import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
 
 import { getRandomId } from './get-random-id';
-import type { QuizItem } from './types';
-
-type KwyziboState = {
-  items: QuizItem[];
-  remainingIds: number[];
-  currentId: number | null;
-};
+import { loadPersistedState } from './load-persisted-state';
+import { persistState } from './persist-state';
+import type { AppState, QuizItem } from './types';
 
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
 export const reset = createAction('kwyzibo/reset');
 
-const createKwyziboReducer = (items: QuizItem[]) => {
-  const initialIds = items.map(question => question.id);
-  const initialState: KwyziboState = {
-    items: items.map(question => ({ ...question })),
-    remainingIds: initialIds,
-    currentId: initialIds.length ? getRandomId(initialIds, items) : null
-  };
+const createAppReducer = (initialState: AppState) => {
+  const initialIds = initialState.items.map(item => item.id);
 
   return createReducer(initialState, builder => {
     builder
@@ -33,9 +24,7 @@ const createKwyziboReducer = (items: QuizItem[]) => {
 
         const rating = action.payload;
         if (currentIndex !== -1) {
-          const currentItem = state.items.find(
-            question => question.id === state.currentId
-          );
+          const currentItem = state.items.find(item => item.id === state.currentId);
           if (currentItem) {
             if (rating > 4) {
               // Remove the current question from rotation if the user reports confidence.
@@ -67,9 +56,22 @@ const createKwyziboReducer = (items: QuizItem[]) => {
   });
 };
 
-export const createAppStore = (items: QuizItem[]) => configureStore({
-  reducer: { kwyzibo: createKwyziboReducer(items) }
-});
+export const createAppStore = (items: QuizItem[]) => {
+  const initialIds = items.map(item => item.id);
+  const initialState = loadPersistedState() ?? {
+    items: items.map(item => ({ ...item })),
+    remainingIds: initialIds,
+    currentId: initialIds.length ? getRandomId(initialIds, items) : null
+  };
+
+  const store = configureStore({
+    reducer: { kwyzibo: createAppReducer(initialState) }
+  });
+
+  persistState(store.getState().kwyzibo);
+  store.subscribe(() => persistState(store.getState().kwyzibo));
+  return store;
+};
 
 type AppStore = ReturnType<typeof createAppStore>;
 

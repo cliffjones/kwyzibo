@@ -15,3 +15,9 @@ export type QuizItem = {
   question: string;
   answer: string;
 };
+
+export type AppState = {
+  items: QuizItem[];
+  remainingIds: number[];
+  currentId: number | null;
+};
