@@ -1,0 +1,39 @@
+.button {
+  background: var(--color--ink);
+  border-radius: var(--size--corner);
+  border: 0;
+  color: var(--color--card);
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;
+  height: var(--size--button);
+  line-height: 1;
+  padding: 0 var(--space--big);
+
+  &--rating {
+    border-radius: var(--size--button);
+    font-size: var(--size--icon);
+    padding: 0 0 var(--space--tiny);
+    width: var(--size--button);
+  }
+
+  &--no {
+    background: var(--color--no);
+  }
+
+  &--negative {
+    background: var(--color--negative);
+  }
+
+  &--neutral {
+    background: var(--color--neutral);
+  }
+
+  &--positive {
+    background: var(--color--positive);
+  }
+
+  &--yes {
+    background: var(--color--yes);
+  }
+}

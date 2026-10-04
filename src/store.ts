@@ -49,7 +49,7 @@ const createKwyziboReducer = (items: QuizItem[]) => {
   return createReducer(initialState, builder => {
     builder
       .addCase(rateConfidence, (state, action) => {
-        if (state.currentId === null) {
+        if (state.currentId == null) {
           return;
         }
 
