@@ -1,6 +1,41 @@
 import { DATA_PATH } from './constants';
 import type { QuizItem, QuizManifest, QuizData } from './types';
 
+const parseKwyz = (contents: string, file: string): QuizData[] => {
+  const blocks = contents
+    .split(/\r?\n/)
+    .reduce<string[][]>((result, line) => {
+      if (line.trim() === '') {
+        if (result[result.length - 1]?.length) {
+          result.push([]);
+        }
+      } else {
+        if (result.length === 0) {
+          result.push([]);
+        }
+        result[result.length - 1].push(line.trim());
+      }
+      return result;
+    }, [])
+    .filter(block => block.length > 0);
+
+  const items: QuizData[] = [];
+  let topic = '';
+  blocks.forEach((block, index) => {
+    if (block.length === 1) {
+      topic = block[0];
+    } else if (block.length === 2) {
+      items.push({ topic, question: block[0], answer: block[1] });
+    } else {
+      throw new Error(
+        `Unable to parse ${file}: expected a topic line or question-answer pair in block ${index + 1}.`
+      );
+    }
+  });
+
+  return items;
+};
+
 export const loadItems = async (): Promise<QuizItem[]> => {
   const manifestResponse = await fetch(`${DATA_PATH}index.json`);
   if (!manifestResponse.ok) {
@@ -15,7 +50,15 @@ export const loadItems = async (): Promise<QuizItem[]> => {
         throw new Error(`Unable to load ${file}: ${response.status}`);
       }
 
-      return await response.json() as QuizData[];
+      if (file.toLowerCase().endsWith('.json')) {
+        return await response.json() as QuizData[];
+      }
+
+      const contents = await response.text();
+      if (contents.trimStart().startsWith('[')) {
+        return JSON.parse(contents) as QuizData[];
+      }
+      return parseKwyz(contents, file);
     })
   );
 

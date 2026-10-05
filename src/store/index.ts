@@ -1,16 +1,26 @@
-import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
+import { configureStore, createAsyncThunk, createAction, createReducer } from '@reduxjs/toolkit';
 
 import { getRandomId } from './get-random-id';
 import { loadPersistedState } from './load-persisted-state';
+import { loadItems } from './load-items';
 import { persistState } from './persist-state';
 import type { AppState, QuizItem } from './types';
 
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
-export const reset = createAction('kwyzibo/reset');
+export const reset = createAsyncThunk('kwyzibo/reset', loadItems);
+
+const createInitialState = (items: QuizItem[]): AppState => {
+  const copiedItems = items.map(item => ({ ...item }));
+  const ids = copiedItems.map(item => item.id);
+
+  return {
+    items: copiedItems,
+    remainingIds: ids,
+    currentId: ids.length ? getRandomId(ids, copiedItems) : null
+  };
+};
 
 const createAppReducer = (initialState: AppState) => {
-  const initialIds = initialState.items.map(item => item.id);
-
   return createReducer(initialState, builder => {
     builder
       .addCase(rateConfidence, (state, action) => {
@@ -47,22 +57,14 @@ const createAppReducer = (initialState: AppState) => {
           state.currentId
         );
       })
-      .addCase(reset, state => {
-        state.remainingIds = [...initialIds];
-        state.currentId = initialIds.length
-          ? getRandomId(initialIds, state.items)
-          : null;
+      .addCase(reset.fulfilled, (_state, action) => {
+        return createInitialState(action.payload);
       });
   });
 };
 
 export const createAppStore = (items: QuizItem[]) => {
-  const initialIds = items.map(item => item.id);
-  const initialState = loadPersistedState() ?? {
-    items: items.map(item => ({ ...item })),
-    remainingIds: initialIds,
-    currentId: initialIds.length ? getRandomId(initialIds, items) : null
-  };
+  const initialState = loadPersistedState() ?? createInitialState(items);
 
   const store = configureStore({
     reducer: { kwyzibo: createAppReducer(initialState) }

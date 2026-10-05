@@ -19,6 +19,8 @@ export const App = () => {
 
   const [revealed, setRevealed] = useState(false);
   const [confirmingReset, setConfirmingReset] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
 
   const currentItem = useSelector((state: RootState) =>
     state.kwyzibo.items.find(item => item.id === currentId)
@@ -41,10 +43,20 @@ export const App = () => {
     setConfirmingReset(false);
   };
 
-  const handleReset = () => {
-    setConfirmingReset(false);
+  const handleReset = async () => {
     setRevealed(false);
-    dispatch(reset());
+    setResetError(null);
+    setResetting(true);
+
+    try {
+      await dispatch(reset()).unwrap();
+      setConfirmingReset(false);
+    } catch (error) {
+      console.error('Unable to reload cards.', error);
+      setResetError('Unable to reload cards. Please try again.');
+    } finally {
+      setResetting(false);
+    }
   };
 
   let remainingMessage = `${itemCount} card${itemCount === 1 ? '' : 's'}`;
@@ -61,11 +73,15 @@ export const App = () => {
         <p>{remainingMessage}</p>
       </header>
 
+      {resetError && <p role="alert">{resetError}</p>}
+
       {confirmingReset ? (
         <Card message="Really reset the quiz?">
           <ButtonSet>
-            <Button className="button--yes" onClick={handleReset}>✔ Yes</Button>
-            <Button className="button--no" onClick={cancelReset}>✘ No</Button>
+            <Button className="button--yes" onClick={handleReset} disabled={resetting}>
+              {resetting ? 'Reloading...' : '✔ Yes'}
+            </Button>
+            <Button className="button--no" onClick={cancelReset} disabled={resetting}>✘ No</Button>
           </ButtonSet>
         </Card>
       ) : remainingIds.length && currentItem ? (<>
@@ -85,7 +101,9 @@ export const App = () => {
       </>) : (
         <Card message="You’ve got this.">
           <ButtonSet>
-            <Button onClick={handleReset}>⭯ Reset</Button>
+            <Button onClick={handleReset} disabled={resetting}>
+              {resetting ? 'Reloading...' : '⭯ Reset'}
+            </Button>
           </ButtonSet>
         </Card>
       )}

@@ -10,7 +10,7 @@ const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>
-    <p>Loading flashcards...</p>
+    <p>Loading cards...</p>
   </StrictMode>
 );
 
@@ -28,7 +28,7 @@ void loadItems()
     console.error(error);
     root.render(
       <StrictMode>
-        <p role="alert">Unable to load flashcards.</p>
+        <p role="alert">Unable to load cards.</p>
       </StrictMode>
     );
   });
