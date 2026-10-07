@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState, selectTopics, startQuiz } from '../../store';
-import { parseKwyz } from '../../store/load-items';
 import { Button } from '../button';
 import { ButtonSet } from '../button/button-set';
 import { Card } from '../card';
@@ -18,11 +17,11 @@ const selectAvailableTopics = createSelector(
 );
 
 type InitialSetupProps = {
-  customDataText: string;
+  customData: string;
   handleTextChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
-export const InitialSetup = ({ customDataText, handleTextChange }: InitialSetupProps) => {
+export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const availableTopics = useSelector(selectAvailableTopics);
@@ -36,7 +35,7 @@ export const InitialSetup = ({ customDataText, handleTextChange }: InitialSetupP
   };
 
   const handleStartQuiz = () => {
-    dispatch(startQuiz(parseKwyz(customDataText)));
+    dispatch(startQuiz());
   };
 
   return (
@@ -54,7 +53,7 @@ export const InitialSetup = ({ customDataText, handleTextChange }: InitialSetupP
         </OptionList>
       ) : null }
 
-      <TextBox label="Custom quiz data:" value={customDataText} onChange={handleTextChange} />
+      <TextBox label="Custom quiz data:" value={customData} onChange={handleTextChange} />
 
       <ButtonSet>
         <Button onClick={handleStartQuiz}>➤ Start</Button>

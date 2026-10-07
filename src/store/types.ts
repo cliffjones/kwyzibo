@@ -18,7 +18,7 @@ export type QuizItem = {
 
 export type AppState = {
   items: QuizItem[];
-  customData: QuizData[];
+  customData: string;
   initializing: boolean;
   selectedTopics: string[];
   remainingIds: number[];

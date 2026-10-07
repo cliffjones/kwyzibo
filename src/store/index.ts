@@ -3,36 +3,37 @@ import { configureStore, createAsyncThunk, createAction, createReducer } from '@
 import { getRandomId } from './get-random-id';
 import { loadPersistedState } from './load-persisted-state';
 import { loadItems } from './load-items';
+import { parseQuizData } from './parse-quiz-data';
 import { persistState } from './persist-state';
-import type { AppState, QuizData, QuizItem } from './types';
+import { DEFAULT_CUSTOM_DATA } from './constants';
+import type { AppState, QuizItem } from './types';
 
 export const selectTopics = createAction<string[]>('kwyzibo/selectTopics');
-export const startQuiz = createAction<QuizData[]>('kwyzibo/startQuiz');
+export const setCustomData = createAction<string>('kwyzibo/setCustomData');
+export const startQuiz = createAction('kwyzibo/startQuiz');
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
 export const reset = createAsyncThunk('kwyzibo/reset', loadItems);
 
 const createInitialState = (
   loadedItems: QuizItem[] = [],
-  customData: QuizData[] = [],
+  customData = DEFAULT_CUSTOM_DATA,
   initializing = true
 ): AppState => {
-  const customItems = customData.map((item, index) => ({
-    ...item,
-    id: loadedItems.length + index,
-    topic: item.topic ?? '',
-    confidence: 0
-  }));
-
-  const items = [
-    ...loadedItems.map((item, index) => ({ ...item, id: index })),
-    ...customItems
-  ];
+  const items = loadedItems.map((item, index) => ({ ...item, id: index }));
+  if (!initializing) {
+    items.push(...parseQuizData(customData).map((item, index) => ({
+      ...item,
+      id: items.length + index,
+      topic: item.topic ?? '',
+      confidence: 0
+    })));
+  }
 
   const ids = items.map(item => item.id);
 
   return {
     items,
-    customData: customData.map(item => ({ ...item })),
+    customData,
     initializing,
     selectedTopics: [...new Set(items.map(item => item.topic))],
     remainingIds: ids,
@@ -78,15 +79,17 @@ const createAppReducer = (initialState: AppState) => {
         state.selectedTopics = action.payload;
       })
 
-      .addCase(startQuiz, (state, action) => {
-        const customData: QuizData[] = action.payload;
-        const sourceItems = state.items.slice(0, state.items.length - state.customData.length);
-        const selectedItems = sourceItems.filter(item => state.selectedTopics.includes(item.topic));
-        return createInitialState(selectedItems, customData, false);
+      .addCase(setCustomData, (state, action) => {
+        state.customData = action.payload;
       })
 
-      .addCase(reset.fulfilled, (_state, action) => {
-        return createInitialState(action.payload);
+      .addCase(startQuiz, state => {
+        const selectedItems = state.items.filter(item => state.selectedTopics.includes(item.topic));
+        return createInitialState(selectedItems, state.customData, false);
+      })
+
+      .addCase(reset.fulfilled, (state, action) => {
+        return createInitialState(action.payload, state.customData);
       });
   });
 };

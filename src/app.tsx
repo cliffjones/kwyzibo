@@ -7,18 +7,23 @@ import { ButtonSet } from './components/button/button-set';
 import { Card } from './components/card';
 import { Confidence } from './components/confidence';
 import { InitialSetup } from './components/initial-setup';
-import { DEFAULT_CUSTOM_DATA_TEXT } from './components/initial-setup/constants';
-import { rateConfidence, reset, type AppDispatch, type RootState } from './store';
+import {
+  rateConfidence,
+  reset,
+  setCustomData,
+  type AppDispatch,
+  type RootState
+} from './store';
 
 export const App = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [revealed, setRevealed] = useState(false);
   const [confirmingReset, setConfirmingReset] = useState(false);
-  const [customDataText, setCustomDataText] = useState(DEFAULT_CUSTOM_DATA_TEXT);
 
   const initializing = useSelector((state: RootState) => state.kwyzibo.initializing);
   const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
+  const customData = useSelector((state: RootState) => state.kwyzibo.customData);
   const remainingIds = useSelector((state: RootState) => state.kwyzibo.remainingIds);
   const currentId = useSelector((state: RootState) => state.kwyzibo.currentId);
   const currentItem = useSelector((state: RootState) =>
@@ -76,8 +81,8 @@ export const App = () => {
 
       {initializing ? (
         <InitialSetup
-          customDataText={customDataText}
-          handleTextChange={({ target: { value } }) => setCustomDataText(value)}
+          customData={customData}
+          handleTextChange={({ target: { value } }) => dispatch(setCustomData(value))}
         />
       ) : confirmingReset ? (
         <Card message="Really reset the quiz?">

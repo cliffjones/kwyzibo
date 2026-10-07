@@ -1,4 +1,3 @@
-import { isQuizData } from './is-quiz-data';
 import { isQuizItem } from './is-quiz-item';
 import type { AppState } from './types';
 
@@ -12,7 +11,7 @@ export const isAppState = (value: unknown): value is AppState => {
     return false;
   }
 
-  if (!Array.isArray(state.customData) || !state.customData.every(isQuizData)) {
+  if (typeof state.customData !== 'string') {
     return false;
   }
 
