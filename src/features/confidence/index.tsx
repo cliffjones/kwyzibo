@@ -1,5 +1,5 @@
-import { Button } from '../button';
-import { ButtonSet } from '../button/button-set';
+import { Button } from '../../ui/button';
+import { ButtonSet } from '../../ui/button/button-set';
 import { CONFIDENCE_RATINGS } from './constants';
 
 type ConfidenceProps = {

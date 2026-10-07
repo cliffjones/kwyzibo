@@ -2,12 +2,12 @@ import { createSelector } from '@reduxjs/toolkit';
 import { ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, selectTopics, startQuiz } from '../../store';
-import { Button } from '../button';
-import { ButtonSet } from '../button/button-set';
+import { Button } from '../../ui/button';
+import { ButtonSet } from '../../ui/button/button-set';
+import { InputBox } from '../../ui/input-box';
+import { Option } from '../../ui/option';
+import { OptionList } from '../../ui/option/option-list';
 import { Card } from '../card';
-import { Option } from '../option';
-import { OptionList } from '../option/option-list';
-import { TextBox } from '../text-box';
 
 const selectAvailableTopics = createSelector(
   [(state: RootState) => state.kwyzibo.items],
@@ -52,7 +52,7 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
         </OptionList>
       ) : null}
 
-      <TextBox label="Custom quiz data:" value={customData} onChange={handleTextChange} />
+      <InputBox label="Custom quiz data:" value={customData} onChange={handleTextChange} />
 
       <ButtonSet>
         <Button onClick={handleStartQuiz}>➤ Start</Button>

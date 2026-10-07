@@ -1,5 +1,5 @@
 import { configureStore, createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
-import { DEFAULT_CUSTOM_DATA } from '../components/initial-setup/constants';
+import { DEFAULT_CUSTOM_DATA } from '../features/initial-setup/constants';
 import { getRandomId } from './get-random-id';
 import { loadItems } from './load-items';
 import { loadPersistedState } from './load-persisted-state';

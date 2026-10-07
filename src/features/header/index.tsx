@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
-import { Button } from '../button';
+import { Button } from '../../ui/button';
 import './style.scss';
 
 type HeaderProps = {

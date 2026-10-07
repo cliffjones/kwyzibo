@@ -1,7 +1,7 @@
 @use '../../style/color';
 @use '../../style/space';
 
-.text-box {
+.input-box {
   color: color.$ink;
   background: color.$paper;
   font: inherit;
@@ -11,7 +11,7 @@
   width: 100%;
 }
 
-.text-box-label {
+.input-box-label {
   color: color.$pencil;
   display: flex;
   flex-direction: column;

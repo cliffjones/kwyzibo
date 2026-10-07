@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from './components/button';
-import { ButtonSet } from './components/button/button-set';
-import { Card } from './components/card';
-import { Confidence } from './components/confidence';
-import { Footer } from './components/footer';
-import { Header } from './components/header';
-import { InitialSetup } from './components/initial-setup';
+import { Card } from './features/card';
+import { Confidence } from './features/confidence';
+import { Footer } from './features/footer';
+import { Header } from './features/header';
+import { InitialSetup } from './features/initial-setup';
 import {
   rateConfidence,
   reset,
@@ -15,12 +13,13 @@ import {
   type RootState
 } from './store';
 import './style/index.scss';
+import { Button } from './ui/button';
+import { ButtonSet } from './ui/button/button-set';
 
 export const App = ({ path }: { path: string }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const initializing = useSelector((state: RootState) => state.kwyzibo.initializing);
-  const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
   const customData = useSelector((state: RootState) => state.kwyzibo.customData);
   const remainingIds = useSelector((state: RootState) => state.kwyzibo.remainingIds);
   const currentId = useSelector((state: RootState) => state.kwyzibo.currentId);
@@ -58,13 +57,6 @@ export const App = ({ path }: { path: string }) => {
       console.error('Unable to reload cards.', error);
     }
   };
-
-  let remainingMessage = `${itemCount} card${itemCount === 1 ? '' : 's'}`;
-  if (remainingIds.length === itemCount) {
-    remainingMessage = `${remainingMessage} loaded`;
-  } else {
-    remainingMessage = `${remainingIds.length} of ${remainingMessage} remaining`;
-  }
 
   return (
     <main className="app" data-path={path}>
