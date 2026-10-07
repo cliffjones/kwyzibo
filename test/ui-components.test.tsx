@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Card } from '../src/features/card';
+import { Confidence } from '../src/features/confidence';
+import { Footer } from '../src/features/footer';
 import { Button } from '../src/ui/button';
 import { ButtonSet } from '../src/ui/button/button-set';
 import { InputBox } from '../src/ui/input-box';
 import { Option } from '../src/ui/option';
 import { OptionList } from '../src/ui/option/option-list';
-import { Card } from '../src/features/card';
-import { Confidence } from '../src/features/confidence';
-import { Footer } from '../src/features/footer';
 
 describe('UI and display components', () => {
   it('renders a button with its standard props and custom class', () => {

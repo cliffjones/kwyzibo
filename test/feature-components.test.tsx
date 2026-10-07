@@ -3,8 +3,9 @@ import { Provider } from 'react-redux';
 import { App } from '../src/app';
 import { Header } from '../src/features/header';
 import { InitialSetup } from '../src/features/initial-setup';
-import { createAppStore, rateConfidence, setCustomData, startQuiz, type QuizItem } from '../src/store';
+import { createAppStore, rateConfidence, setCustomData, startQuiz } from '../src/store';
 import { loadItems } from '../src/store/load-items';
+import type { QuizItem } from '../src/store/types';
 
 jest.mock('../src/store/load-items', () => ({
   loadItems: jest.fn()

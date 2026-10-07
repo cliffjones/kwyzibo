@@ -45,7 +45,7 @@ describe('RouterApp', () => {
   });
 
   it('renders an alert when cards fail to load', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
     mockedLoadItems.mockRejectedValue(new Error('network failure'));
 
     render(<RouterApp />);
