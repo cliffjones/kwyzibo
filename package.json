@@ -29,8 +29,8 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
-    "babel-jest": "^30.5.0",
-    "jest": "^30.5.0",
+    "babel-jest": "^30.5.2",
+    "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.0",
     "oxlint": "^1.81.0",
     "sass": "^1.105.1",
@@ -38,6 +38,10 @@
     "vite": "^8.3.0"
   },
   "allowScripts": {
-    "@parcel/watcher@2.6.0": true
+    "@parcel/watcher@2.6.0": true,
+    "unrs-resolver@1.12.2": true
+  },
+  "overrides": {
+    "js-yaml": "^4.1.0"
   }
 }
