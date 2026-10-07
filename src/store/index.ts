@@ -12,12 +12,16 @@ export const selectTopics = createAction<string[]>('kwyzibo/selectTopics');
 export const setCustomData = createAction<string>('kwyzibo/setCustomData');
 export const startQuiz = createAction('kwyzibo/startQuiz');
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
-export const reset = createAsyncThunk('kwyzibo/reset', loadItems);
+export const reset = createAsyncThunk(
+  'kwyzibo/reset',
+  async (path: string) => ({ items: await loadItems(path), path })
+);
 
 const createInitialState = (
   loadedItems: QuizItem[] = [],
   customData = DEFAULT_CUSTOM_DATA,
-  initializing = true
+  initializing = true,
+  sourcePath = '/'
 ): AppState => {
   const items = loadedItems.map((item, index) => ({ ...item, id: index }));
   if (!initializing) {
@@ -35,9 +39,10 @@ const createInitialState = (
     items,
     customData,
     initializing,
+    sourcePath,
     selectedTopics: [...new Set(items.map(item => item.topic))],
     remainingIds: ids,
-    currentId: ids.length ? getRandomId(ids, items) : null,
+    currentId: ids.length ? getRandomId(ids, items) : null
   };
 };
 
@@ -85,18 +90,26 @@ const createAppReducer = (initialState: AppState) => {
 
       .addCase(startQuiz, state => {
         const selectedItems = state.items.filter(item => state.selectedTopics.includes(item.topic));
-        return createInitialState(selectedItems, state.customData, false);
+        return createInitialState(selectedItems, state.customData, false, state.sourcePath);
       })
 
       .addCase(reset.fulfilled, (state, action) => {
-        return createInitialState(action.payload, state.customData);
+        return createInitialState(
+          action.payload.items,
+          state.customData,
+          true,
+          action.payload.path
+        );
       });
   });
 };
 
-export const createAppStore = (items: QuizItem[] = []) => {
+export const createAppStore = (items: QuizItem[] = [], sourcePath = '/') => {
   const savedState = loadPersistedState();
-  const initialState = savedState ?? createInitialState(items);
+  const restoredState = savedState?.sourcePath === sourcePath
+    ? { ...savedState, sourcePath }
+    : null;
+  const initialState = restoredState ?? createInitialState(items, DEFAULT_CUSTOM_DATA, true, sourcePath);
 
   const store = configureStore({
     reducer: { kwyzibo: createAppReducer(initialState) }
@@ -108,5 +121,6 @@ export const createAppStore = (items: QuizItem[] = []) => {
 };
 
 type AppStore = ReturnType<typeof createAppStore>;
+export type { AppStore };
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];

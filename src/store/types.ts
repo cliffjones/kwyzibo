@@ -20,6 +20,7 @@ export type AppState = {
   items: QuizItem[];
   customData: string;
   initializing: boolean;
+  sourcePath: string;
   selectedTopics: string[];
   remainingIds: number[];
   currentId: number | null;

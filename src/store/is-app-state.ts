@@ -19,6 +19,10 @@ export const isAppState = (value: unknown): value is AppState => {
     return false;
   }
 
+  if (typeof state.sourcePath !== 'string') {
+    return false;
+  }
+
   if (!Array.isArray(state.selectedTopics) || !state.selectedTopics.every(topic => typeof topic === 'string')) {
     return false;
   }

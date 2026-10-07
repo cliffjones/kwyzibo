@@ -15,7 +15,7 @@ import {
   type RootState
 } from './store';
 
-export const App = ({ query }: { query: string }) => {
+export const App = ({ path }: { path: string }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [revealed, setRevealed] = useState(false);
@@ -51,7 +51,7 @@ export const App = ({ query }: { query: string }) => {
     setRevealed(false);
 
     try {
-      await dispatch(reset()).unwrap();
+      await dispatch(reset(path)).unwrap();
       setConfirmingReset(false);
     } catch (error) {
       console.error('Unable to reload cards.', error);
@@ -65,10 +65,8 @@ export const App = ({ query }: { query: string }) => {
     remainingMessage = `${remainingIds.length} of ${remainingMessage} remaining`;
   }
 
-  console.log({query});
-
   return (
-    <main className="app">
+    <main className="app" data-path={path}>
       <header className="header">
         <h1>Kwyzibo</h1>
         {initializing ? null : (

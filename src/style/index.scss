@@ -7,11 +7,11 @@
 }
 
 body {
-  margin: 0;
+  margin: space.$small;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: size.$text;
   background: color.$desk;
-  color: color.$ink;
+  color: color.$pencil;
 }
 
 p,
@@ -25,12 +25,8 @@ a {
   text-decoration: none;
 }
 
-.loader {
-  color: color.$pencil;
-  padding: space.$small;
-}
-
 .app {
+  color: color.$ink;
   display: flex;
   flex-direction: column;
   gap: space.$huge;
@@ -40,10 +36,14 @@ a {
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: space.$mid;
+  align-items: center;
 
   h1 {
     font-size: 3rem;
+    line-height: 1;
   }
 }
 
