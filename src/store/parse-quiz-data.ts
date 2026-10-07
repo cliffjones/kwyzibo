@@ -1,6 +1,15 @@
+import { isQuizData } from './is-quiz-data';
 import { QuizData } from './types';
 
 export const parseQuizData = (data: string): QuizData[] => {
+  // If the data looks like JSON, treat it as such.
+  if (data.trimStart().startsWith('[')) {
+    const parsedData = JSON.parse(data);
+    if (Array.isArray(parsedData) && parsedData.every(isQuizData)) {
+      return parsedData;
+    }
+  }
+
   const blocks = data
     .split(/\r?\n/)
     .reduce<string[][]>((result, line) => {

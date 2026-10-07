@@ -94,7 +94,7 @@ const createAppReducer = (initialState: AppState) => {
   });
 };
 
-export const createAppStore = (items: QuizItem[]) => {
+export const createAppStore = (items: QuizItem[] = []) => {
   const savedState = loadPersistedState();
   const initialState = savedState ?? createInitialState(items);
 

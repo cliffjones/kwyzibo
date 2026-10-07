@@ -25,6 +25,11 @@ a {
   text-decoration: none;
 }
 
+.loader {
+  color: color.$pencil;
+  padding: space.$small;
+}
+
 .app {
   display: flex;
   flex-direction: column;

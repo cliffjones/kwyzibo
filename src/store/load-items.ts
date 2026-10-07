@@ -17,15 +17,7 @@ export const loadItems = async (): Promise<QuizItem[]> => {
         throw new Error(`Unable to load ${file}: ${response.status}`);
       }
 
-      if (file.toLowerCase().endsWith('.json')) {
-        return await response.json() as QuizData[];
-      }
-
       const data = await response.text();
-      if (data.trimStart().startsWith('[')) {
-        return JSON.parse(data) as QuizData[];
-      }
-
       return parseQuizData(data);
     })
   );

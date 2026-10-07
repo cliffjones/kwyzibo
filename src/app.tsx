@@ -15,7 +15,7 @@ import {
   type RootState
 } from './store';
 
-export const App = () => {
+export const App = ({ query }: { query: string }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [revealed, setRevealed] = useState(false);
@@ -64,6 +64,8 @@ export const App = () => {
   } else {
     remainingMessage = `${remainingIds.length} of ${remainingMessage} remaining`;
   }
+
+  console.log({query});
 
   return (
     <main className="app">
