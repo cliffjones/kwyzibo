@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-
 import './style.scss';
 
 type ButtonSetProps = {

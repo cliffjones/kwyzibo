@@ -1,7 +1,7 @@
-import { AppState } from './types';
+import { STORAGE_KEY } from './constants';
 import { isAppState } from './is-app-state';
 import { isQuizItem } from './is-quiz-item';
-import { STORAGE_KEY } from './constants';
+import { AppState } from './types';
 
 export const loadPersistedState = (): AppState | null => {
   if (typeof window === 'undefined') {

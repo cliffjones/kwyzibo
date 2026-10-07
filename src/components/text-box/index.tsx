@@ -1,5 +1,4 @@
 import type { TextareaHTMLAttributes } from 'react';
-
 import './style.scss';
 
 type TextBoxProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {

@@ -1,5 +1,5 @@
-import { AppState } from './types';
 import { STORAGE_KEY } from './constants';
+import { AppState } from './types';
 
 export const persistState = (state: AppState) => {
   if (typeof window === 'undefined') {

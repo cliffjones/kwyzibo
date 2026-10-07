@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { useLocation } from 'react-router';
-
 import { App } from './app';
 import { createAppStore, type AppStore } from './store';
 import { loadItems } from './store/load-items';

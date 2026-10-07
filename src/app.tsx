@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-
-import './style/index.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './components/button';
 import { ButtonSet } from './components/button/button-set';
 import { Card } from './components/card';
 import { Confidence } from './components/confidence';
+import { Footer } from './components/footer';
+import { Header } from './components/header';
 import { InitialSetup } from './components/initial-setup';
 import {
   rateConfidence,
@@ -14,8 +14,7 @@ import {
   type AppDispatch,
   type RootState
 } from './store';
-import { Header } from './components/header';
-import { Footer } from './components/footer';
+import './style/index.scss';
 
 export const App = ({ path }: { path: string }) => {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,9 +1,8 @@
-import { configureStore, createAsyncThunk, createAction, createReducer } from '@reduxjs/toolkit';
-
+import { configureStore, createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import { DEFAULT_CUSTOM_DATA } from '../components/initial-setup/constants';
 import { getRandomId } from './get-random-id';
-import { loadPersistedState } from './load-persisted-state';
 import { loadItems } from './load-items';
+import { loadPersistedState } from './load-persisted-state';
 import { parseQuizData } from './parse-quiz-data';
 import { persistState } from './persist-state';
 import type { AppState, QuizItem } from './types';

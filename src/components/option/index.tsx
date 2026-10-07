@@ -1,5 +1,4 @@
 import type { InputHTMLAttributes } from 'react';
-
 import './style.scss';
 
 type OptionProps = InputHTMLAttributes<HTMLInputElement> & {

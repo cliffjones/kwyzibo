@@ -1,4 +1,4 @@
-import { QuizData } from "./types";
+import { QuizData } from './types';
 
 export const isQuizData = (value: unknown): value is QuizData => {
   if (value == null || typeof value !== 'object') {

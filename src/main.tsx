@@ -1,9 +1,8 @@
-import { createRoot } from 'react-dom/client';
 import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
-
-import './style/index.scss';
 import { RouterApp } from './router-app';
+import './style/index.scss';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(

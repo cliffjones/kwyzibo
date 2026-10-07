@@ -1,7 +1,6 @@
+import { createSelector } from '@reduxjs/toolkit';
 import { ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
-
 import { AppDispatch, RootState, selectTopics, startQuiz } from '../../store';
 import { Button } from '../button';
 import { ButtonSet } from '../button/button-set';
@@ -51,7 +50,7 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
             />
           ))}
         </OptionList>
-      ) : null }
+      ) : null}
 
       <TextBox label="Custom quiz data:" value={customData} onChange={handleTextChange} />
 
