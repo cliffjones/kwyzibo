@@ -34,29 +34,3 @@ a {
   padding-bottom: space.$big;
   width: min(600px, 90%);
 }
-
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: space.$mid;
-  align-items: center;
-
-  h1 {
-    font-size: 3rem;
-    line-height: 1;
-  }
-}
-
-.info-bar {
-  align-items: center;
-  color: color.$pencil;
-  display: flex;
-  gap: space.$small;
-  justify-content: center;
-  line-height: 1;
-}
-
-.footer {
-  color: color.$pencil;
-  text-align: center;
-}

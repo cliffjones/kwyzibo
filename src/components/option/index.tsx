@@ -2,11 +2,11 @@ import type { InputHTMLAttributes } from 'react';
 
 import './style.scss';
 
-type CheckboxOptionProps = InputHTMLAttributes<HTMLInputElement> & {
+type OptionProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
 };
 
-export const CheckboxOption = ({ label, ...props }: CheckboxOptionProps) => (
+export const Option = ({ label, ...props }: OptionProps) => (
   <label className="option">
     <input
       type="checkbox"

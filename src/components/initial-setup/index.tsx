@@ -6,7 +6,7 @@ import { AppDispatch, RootState, selectTopics, startQuiz } from '../../store';
 import { Button } from '../button';
 import { ButtonSet } from '../button/button-set';
 import { Card } from '../card';
-import { CheckboxOption } from '../option';
+import { Option } from '../option';
 import { OptionList } from '../option/option-list';
 import { TextBox } from '../text-box';
 
@@ -43,7 +43,7 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
       {availableTopics.length ? (
         <OptionList label="Preloaded topics:">
           {availableTopics.map(topic => (
-            <CheckboxOption
+            <Option
               key={topic}
               label={topic}
               checked={selectedTopics.includes(topic)}

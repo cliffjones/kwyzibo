@@ -1,0 +1,23 @@
+@use '../../style/color';
+@use '../../style/space';
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: space.$mid;
+  align-items: center;
+
+  h1 {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.header-info {
+  align-items: center;
+  color: color.$pencil;
+  display: flex;
+  gap: space.$small;
+  justify-content: center;
+  line-height: 1;
+}

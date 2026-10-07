@@ -18,7 +18,7 @@ export const RouterApp = () => {
     void loadItems(pathname)
       .then(items => {
         if (!canceled) {
-          setRouteLoad({ path: pathname, store: createAppStore(items, pathname) });
+          setRouteLoad({ path: pathname, store: createAppStore(pathname, items) });
         }
       })
       .catch((error: unknown) => {

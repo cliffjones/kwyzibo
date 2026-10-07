@@ -14,12 +14,11 @@ import {
   type AppDispatch,
   type RootState
 } from './store';
+import { Header } from './components/header';
+import { Footer } from './components/footer';
 
 export const App = ({ path }: { path: string }) => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const [revealed, setRevealed] = useState(false);
-  const [confirmingReset, setConfirmingReset] = useState(false);
 
   const initializing = useSelector((state: RootState) => state.kwyzibo.initializing);
   const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
@@ -29,6 +28,9 @@ export const App = ({ path }: { path: string }) => {
   const currentItem = useSelector((state: RootState) =>
     state.kwyzibo.items.find(item => item.id === currentId)
   );
+
+  const [revealed, setRevealed] = useState(false);
+  const [confirmingReset, setConfirmingReset] = useState(false);
 
   const handleReveal = () => {
     setRevealed(true);
@@ -67,17 +69,7 @@ export const App = ({ path }: { path: string }) => {
 
   return (
     <main className="app" data-path={path}>
-      <header className="header">
-        <h1>Kwyzibo</h1>
-        {initializing ? null : (
-          <div className="info-bar">
-            {remainingMessage}
-            {confirmingReset || !remainingIds.length ? null : (
-              <Button className="button--minor" onClick={confirmReset} title="Reset">⭯</Button>
-            )}
-          </div>
-        )}
-      </header>
+      <Header confirmReset={confirmReset} confirmingReset={confirmingReset} />
 
       {initializing ? (
         <InitialSetup
@@ -113,9 +105,7 @@ export const App = ({ path }: { path: string }) => {
         </Card>
       )}
 
-      <footer className="footer">
-        By <a href="https://ko-fi.com/cliff" target="_blank" title="Donate on Ko-fi">Cliff Jones Jr.</a>
-      </footer>
+      <Footer />
     </main>
   );
 };
