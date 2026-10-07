@@ -1,11 +1,11 @@
 import { configureStore, createAsyncThunk, createAction, createReducer } from '@reduxjs/toolkit';
 
+import { DEFAULT_CUSTOM_DATA } from '../components/initial-setup/constants';
 import { getRandomId } from './get-random-id';
 import { loadPersistedState } from './load-persisted-state';
 import { loadItems } from './load-items';
 import { parseQuizData } from './parse-quiz-data';
 import { persistState } from './persist-state';
-import { DEFAULT_CUSTOM_DATA } from './constants';
 import type { AppState, QuizItem } from './types';
 
 export const selectTopics = createAction<string[]>('kwyzibo/selectTopics');
@@ -108,7 +108,5 @@ export const createAppStore = (items: QuizItem[]) => {
 };
 
 type AppStore = ReturnType<typeof createAppStore>;
-
 export type RootState = ReturnType<AppStore['getState']>;
-
 export type AppDispatch = AppStore['dispatch'];

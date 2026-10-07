@@ -72,7 +72,7 @@ export const App = () => {
         {initializing ? null : (
           <div className="info-bar">
             {remainingMessage}
-            {confirmingReset ? null : (
+            {confirmingReset || !remainingIds.length ? null : (
               <Button className="button--minor" onClick={confirmReset} title="Reset">⭯</Button>
             )}
           </div>
