@@ -1,0 +1,20 @@
+@use '../../style/color';
+@use '../../style/space';
+
+.text-box {
+  color: color.$ink;
+  background: color.$paper;
+  font: inherit;
+  min-height: 10rem;
+  padding: space.$small;
+  resize: vertical;
+  width: 100%;
+}
+
+.text-box-label {
+  color: color.$pencil;
+  display: flex;
+  flex-direction: column;
+  gap: space.$small;
+  text-align: left;
+}

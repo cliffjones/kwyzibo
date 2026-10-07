@@ -3,25 +3,24 @@ import { useState } from 'react';
 
 import './style/index.scss';
 import { Button } from './components/button';
-import { ButtonSet } from './components/button-set';
+import { ButtonSet } from './components/button/button-set';
 import { Card } from './components/card';
 import { Confidence } from './components/confidence';
-import { rateConfidence, reset, type RootState, type AppDispatch } from './store';
+import { InitialSetup } from './components/initial-setup';
+import { DEFAULT_CUSTOM_DATA_TEXT } from './components/initial-setup/constants';
+import { rateConfidence, reset, type AppDispatch, type RootState } from './store';
 
 export const App = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
-
-  const remainingIds = useSelector((state: RootState) => state.kwyzibo.remainingIds);
-
-  const currentId = useSelector((state: RootState) => state.kwyzibo.currentId);
-
   const [revealed, setRevealed] = useState(false);
   const [confirmingReset, setConfirmingReset] = useState(false);
-  const [resetting, setResetting] = useState(false);
-  const [resetError, setResetError] = useState<string | null>(null);
+  const [customDataText, setCustomDataText] = useState(DEFAULT_CUSTOM_DATA_TEXT);
 
+  const initializing = useSelector((state: RootState) => state.kwyzibo.initializing);
+  const itemCount = useSelector((state: RootState) => state.kwyzibo.items.length);
+  const remainingIds = useSelector((state: RootState) => state.kwyzibo.remainingIds);
+  const currentId = useSelector((state: RootState) => state.kwyzibo.currentId);
   const currentItem = useSelector((state: RootState) =>
     state.kwyzibo.items.find(item => item.id === currentId)
   );
@@ -45,17 +44,12 @@ export const App = () => {
 
   const handleReset = async () => {
     setRevealed(false);
-    setResetError(null);
-    setResetting(true);
 
     try {
       await dispatch(reset()).unwrap();
       setConfirmingReset(false);
     } catch (error) {
       console.error('Unable to reload cards.', error);
-      setResetError('Unable to reload cards. Please try again.');
-    } finally {
-      setResetting(false);
     }
   };
 
@@ -70,18 +64,26 @@ export const App = () => {
     <main className="app">
       <header className="header">
         <h1>Kwyzibo</h1>
-        <p>{remainingMessage}</p>
+        {initializing ? null : (
+          <div className="info-bar">
+            {remainingMessage}
+            {confirmingReset ? null : (
+              <Button className="button--minor" onClick={confirmReset} title="Reset">⭯</Button>
+            )}
+          </div>
+        )}
       </header>
 
-      {resetError && <p role="alert">{resetError}</p>}
-
-      {confirmingReset ? (
+      {initializing ? (
+        <InitialSetup
+          customDataText={customDataText}
+          handleTextChange={({ target: { value } }) => setCustomDataText(value)}
+        />
+      ) : confirmingReset ? (
         <Card message="Really reset the quiz?">
           <ButtonSet>
-            <Button className="button--yes" onClick={handleReset} disabled={resetting}>
-              {resetting ? 'Reloading...' : '✔ Yes'}
-            </Button>
-            <Button className="button--no" onClick={cancelReset} disabled={resetting}>✘ No</Button>
+            <Button className="button--yes" onClick={handleReset}>✔ Yes</Button>
+            <Button className="button--no" onClick={cancelReset}>✘ No</Button>
           </ButtonSet>
         </Card>
       ) : remainingIds.length && currentItem ? (<>
@@ -95,21 +97,19 @@ export const App = () => {
 
         {revealed && (
           <Card content={currentItem.answer}>
-            <Confidence handleRating={handleRating} confirmReset={confirmReset} />
+            <Confidence handleRating={handleRating} />
           </Card>
         )}
       </>) : (
         <Card message="You’ve got this.">
           <ButtonSet>
-            <Button onClick={handleReset} disabled={resetting}>
-              {resetting ? 'Reloading...' : '⭯ Reset'}
-            </Button>
+            <Button onClick={handleReset}>⭯ Reset</Button>
           </ButtonSet>
         </Card>
       )}
 
       <footer className="footer">
-        By <a href="https://cliffjonesjr.com/" target="_blank">Cliff Jones Jr.</a>
+        By <a href="https://ko-fi.com/cliff" target="_blank" title="Donate on Ko-fi">Cliff Jones Jr.</a>
       </footer>
     </main>
   );

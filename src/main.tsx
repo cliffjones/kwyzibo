@@ -16,9 +16,10 @@ root.render(
 
 void loadItems()
   .then(items => {
+    const store = createAppStore(items);
     root.render(
       <StrictMode>
-        <Provider store={createAppStore(items)}>
+        <Provider store={store}>
           <App />
         </Provider>
       </StrictMode>

@@ -4,19 +4,39 @@ import { getRandomId } from './get-random-id';
 import { loadPersistedState } from './load-persisted-state';
 import { loadItems } from './load-items';
 import { persistState } from './persist-state';
-import type { AppState, QuizItem } from './types';
+import type { AppState, QuizData, QuizItem } from './types';
 
+export const selectTopics = createAction<string[]>('kwyzibo/selectTopics');
+export const startQuiz = createAction<QuizData[]>('kwyzibo/startQuiz');
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
 export const reset = createAsyncThunk('kwyzibo/reset', loadItems);
 
-const createInitialState = (items: QuizItem[]): AppState => {
-  const copiedItems = items.map(item => ({ ...item }));
-  const ids = copiedItems.map(item => item.id);
+const createInitialState = (
+  loadedItems: QuizItem[] = [],
+  customData: QuizData[] = [],
+  initializing = true
+): AppState => {
+  const customItems = customData.map((item, index) => ({
+    ...item,
+    id: loadedItems.length + index,
+    topic: item.topic ?? '',
+    confidence: 0
+  }));
+
+  const items = [
+    ...loadedItems.map((item, index) => ({ ...item, id: index })),
+    ...customItems
+  ];
+
+  const ids = items.map(item => item.id);
 
   return {
-    items: copiedItems,
+    items,
+    customData: customData.map(item => ({ ...item })),
+    initializing,
+    selectedTopics: [...new Set(items.map(item => item.topic))],
     remainingIds: ids,
-    currentId: ids.length ? getRandomId(ids, copiedItems) : null
+    currentId: ids.length ? getRandomId(ids, items) : null,
   };
 };
 
@@ -51,12 +71,20 @@ const createAppReducer = (initialState: AppState) => {
           return;
         }
 
-        state.currentId = getRandomId(
-          state.remainingIds,
-          state.items,
-          state.currentId
-        );
+        state.currentId = getRandomId(state.remainingIds, state.items, state.currentId);
       })
+
+      .addCase(selectTopics, (state, action) => {
+        state.selectedTopics = action.payload;
+      })
+
+      .addCase(startQuiz, (state, action) => {
+        const customData: QuizData[] = action.payload;
+        const sourceItems = state.items.slice(0, state.items.length - state.customData.length);
+        const selectedItems = sourceItems.filter(item => state.selectedTopics.includes(item.topic));
+        return createInitialState(selectedItems, customData, false);
+      })
+
       .addCase(reset.fulfilled, (_state, action) => {
         return createInitialState(action.payload);
       });
@@ -64,7 +92,8 @@ const createAppReducer = (initialState: AppState) => {
 };
 
 export const createAppStore = (items: QuizItem[]) => {
-  const initialState = loadPersistedState() ?? createInitialState(items);
+  const savedState = loadPersistedState();
+  const initialState = savedState ?? createInitialState(items);
 
   const store = configureStore({
     reducer: { kwyzibo: createAppReducer(initialState) }

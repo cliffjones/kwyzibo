@@ -24,7 +24,7 @@ export const Card = ({
     ) : null}
 
     {message ? (
-      <p className="message">{message}</p>
+      <p className="card-message">{message}</p>
     ) : null}
 
     {children}

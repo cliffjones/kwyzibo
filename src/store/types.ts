@@ -11,13 +11,16 @@ export type QuizData = {
 export type QuizItem = {
   id: number;
   topic: string;
-  confidence: number;
   question: string;
   answer: string;
+  confidence: number;
 };
 
 export type AppState = {
   items: QuizItem[];
+  customData: QuizData[];
+  initializing: boolean;
+  selectedTopics: string[];
   remainingIds: number[];
   currentId: number | null;
 };

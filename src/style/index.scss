@@ -9,6 +9,7 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: size.$text;
   background: color.$desk;
   color: color.$ink;
 }
@@ -39,18 +40,18 @@ a {
   h1 {
     font-size: 3rem;
   }
+}
 
-  p {
-    color: color.$pencil;
-  }
+.info-bar {
+  align-items: center;
+  color: color.$pencil;
+  display: flex;
+  gap: space.$small;
+  justify-content: center;
+  line-height: 1;
 }
 
 .footer {
   color: color.$pencil;
   text-align: center;
-}
-
-.message {
-  color: color.$pencil;
-  font-size: 1.5rem;
 }

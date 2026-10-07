@@ -1,13 +1,12 @@
 import { Button } from '../button';
-import { ButtonSet } from '../button-set';
+import { ButtonSet } from '../button/button-set';
 import { CONFIDENCE_RATINGS } from './constants';
 
 type ConfidenceProps = {
   handleRating: (rating: number) => void;
-  confirmReset?: () => void;
 };
 
-export const Confidence = ({ handleRating, confirmReset }: ConfidenceProps) => (
+export const Confidence = ({ handleRating }: ConfidenceProps) => (
   <ButtonSet>
     Got it?
     <Button
@@ -35,9 +34,5 @@ export const Confidence = ({ handleRating, confirmReset }: ConfidenceProps) => (
       onClick={() => handleRating(5)}
       title={CONFIDENCE_RATINGS[4].label}
     >{CONFIDENCE_RATINGS[4].icon}</Button>
-
-    {confirmReset && (
-      <Button className="button--secondary" onClick={confirmReset} title="Reset">⭯</Button>
-    )}
   </ButtonSet>
 );
