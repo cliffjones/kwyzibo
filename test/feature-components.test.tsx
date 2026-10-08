@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import { App } from '../src/app';
 import { Header } from '../src/features/header';
 import { InitialSetup } from '../src/features/initial-setup';
-import { createAppStore, rateConfidence, setCustomData, startQuiz } from '../src/store';
+import { CUSTOM_DATA_EXAMPLE } from '../src/features/initial-setup/constants';
+import { createAppStore, rateConfidence, setCustomData, setDarkMode, startQuiz } from '../src/store';
 import { loadItems } from '../src/store/load-items';
 import type { QuizItem } from '../src/store/types';
 
@@ -22,10 +23,11 @@ const createItems = (): QuizItem[] => [
 describe('feature and application components', () => {
   beforeEach(() => {
     window.localStorage.clear();
+    delete document.documentElement.dataset.theme;
   });
 
   it('shows card counts and calls the reset confirmation handler', () => {
-    const store = createAppStore('/header', createItems().slice(0, 1));
+    const store = createAppStore('/test', createItems().slice(0, 1));
     store.dispatch(setCustomData(''));
     store.dispatch(startQuiz());
     const confirmReset = jest.fn();
@@ -41,8 +43,52 @@ describe('feature and application components', () => {
     expect(confirmReset).toHaveBeenCalledTimes(1);
   });
 
+  it('toggles and persists the global color theme from the header', () => {
+    const store = createAppStore('/test');
+
+    const { unmount } = render(
+      <Provider store={store}>
+        <Header confirmReset={jest.fn()} confirmingReset={false} />
+      </Provider>
+    );
+
+    const toggle = screen.getByTitle('Switch to Dark Mode');
+    fireEvent.click(toggle);
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(store.getState().kwyzibo.darkMode).toBe(true);
+    expect(JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}').darkMode).toBe(true);
+
+    const restoredStore = createAppStore('/test');
+    expect(restoredStore.getState().kwyzibo.darkMode).toBe(true);
+
+    unmount();
+    render(
+      <Provider store={restoredStore}>
+        <Header confirmReset={jest.fn()} confirmingReset={false} />
+      </Provider>
+    );
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+
+    fireEvent.click(screen.getByTitle('Switch to Light Mode'));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+    expect(restoredStore.getState().kwyzibo.darkMode).toBe(false);
+  });
+
+  it('restores saved state without a darkMode field as light mode', () => {
+    createAppStore('/test');
+    const savedState = JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}');
+    delete savedState.darkMode;
+    window.localStorage.setItem('kwyzibo', JSON.stringify(savedState));
+
+    const store = createAppStore('/test');
+
+    expect(store.getState().kwyzibo.darkMode).toBe(false);
+    expect(JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}').darkMode).toBe(false);
+  });
+
   it('lists unique topics in order, updates selection, and starts the quiz', () => {
-    const store = createAppStore('/setup', createItems());
+    const store = createAppStore('/test', createItems());
     store.dispatch(setCustomData(''));
     const handleTextChange = jest.fn();
 
@@ -69,11 +115,12 @@ describe('feature and application components', () => {
   });
 
   it('starts a quiz, reveals an answer, and advances after a confident rating', () => {
-    const store = createAppStore('/app');
+    const store = createAppStore('/test');
+    store.dispatch(setCustomData(CUSTOM_DATA_EXAMPLE));
 
     render(
       <Provider store={store}>
-        <App path="/app" />
+        <App path="/test" />
       </Provider>
     );
 
@@ -96,13 +143,15 @@ describe('feature and application components', () => {
 
   it('renders the reset confirmation and dispatches reset when accepted', async () => {
     mockedLoadItems.mockResolvedValue([]);
-    const store = createAppStore('/reset');
+    const store = createAppStore('/test');
+    store.dispatch(setCustomData(CUSTOM_DATA_EXAMPLE));
+    store.dispatch(setDarkMode(true));
     store.dispatch(startQuiz());
     store.dispatch(rateConfidence(5));
 
     render(
       <Provider store={store}>
-        <App path="/reset" />
+        <App path="/test" />
       </Provider>
     );
 
@@ -111,5 +160,7 @@ describe('feature and application components', () => {
 
     fireEvent.click(screen.getByRole('button', { name: '✔ Yes' }));
     expect(await screen.findByText('What do you want to learn today?')).toBeInTheDocument();
+    expect(mockedLoadItems).toHaveBeenCalledWith('/test');
+    expect(store.getState().kwyzibo.darkMode).toBe(true);
   });
 });

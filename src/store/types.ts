@@ -17,10 +17,11 @@ export type QuizItem = {
 };
 
 export type AppState = {
+  sourcePath: string;
   items: QuizItem[];
   customData: string;
   initializing: boolean;
-  sourcePath: string;
+  darkMode: boolean;
   selectedTopics: string[];
   remainingIds: number[];
   currentId: number | null;

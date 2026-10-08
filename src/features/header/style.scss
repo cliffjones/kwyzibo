@@ -6,11 +6,20 @@
   flex-direction: column;
   gap: space.$mid;
   align-items: center;
+}
 
-  h1 {
-    font-size: 3rem;
-    line-height: 1;
-  }
+.header-title {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.header-toolbar {
+  align-items: center;
+  display: flex;
+  gap: space.$mid;
+  position: absolute;
+  right: space.$mid;
+  top: space.$mid;
 }
 
 .header-info {

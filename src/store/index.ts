@@ -1,5 +1,4 @@
 import { configureStore, createAction, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
-import { DEFAULT_CUSTOM_DATA } from '../features/initial-setup/constants';
 import { getRandomId } from './get-random-id';
 import { loadItems } from './load-items';
 import { loadPersistedState } from './load-persisted-state';
@@ -9,6 +8,7 @@ import type { AppState, QuizItem } from './types';
 
 export const selectTopics = createAction<string[]>('kwyzibo/selectTopics');
 export const setCustomData = createAction<string>('kwyzibo/setCustomData');
+export const setDarkMode = createAction<boolean>('kwyzibo/setDarkMode');
 export const startQuiz = createAction('kwyzibo/startQuiz');
 export const rateConfidence = createAction<number>('kwyzibo/rateConfidence');
 export const reset = createAsyncThunk(
@@ -19,8 +19,9 @@ export const reset = createAsyncThunk(
 const createInitialState = (
   sourcePath = '/',
   loadedItems: QuizItem[] = [],
-  customData = DEFAULT_CUSTOM_DATA,
-  initializing = true
+  customData = '',
+  initializing = true,
+  darkMode = false
 ): AppState => {
   const items = loadedItems.map((item, index) => ({ ...item, id: index }));
   if (!initializing) {
@@ -38,6 +39,7 @@ const createInitialState = (
     items,
     customData,
     initializing,
+    darkMode,
     sourcePath,
     selectedTopics: [...new Set(items.map(item => item.topic))],
     remainingIds: ids,
@@ -87,13 +89,23 @@ const createAppReducer = (initialState: AppState) => {
         state.customData = action.payload;
       })
 
+      .addCase(setDarkMode, (state, action) => {
+        state.darkMode = action.payload;
+      })
+
       .addCase(startQuiz, state => {
         const selectedItems = state.items.filter(item => state.selectedTopics.includes(item.topic));
-        return createInitialState(state.sourcePath, selectedItems, state.customData, false);
+        return createInitialState(state.sourcePath, selectedItems, state.customData, false, state.darkMode);
       })
 
       .addCase(reset.fulfilled, (state, action) => {
-        const nextState = createInitialState(action.payload.path, action.payload.items, state.customData);
+        const nextState = createInitialState(
+          action.payload.path,
+          action.payload.items,
+          state.customData,
+          true,
+          state.darkMode
+        );
         nextState.selectedTopics = state.selectedTopics;
         return nextState;
       });
@@ -105,7 +117,7 @@ export const createAppStore = (sourcePath = '/', items: QuizItem[] = []) => {
   const restoredState = savedState?.sourcePath === sourcePath
     ? { ...savedState, sourcePath }
     : null;
-  const initialState = restoredState ?? createInitialState(sourcePath, items, DEFAULT_CUSTOM_DATA);
+  const initialState = restoredState ?? createInitialState(sourcePath, items);
 
   const store = configureStore({
     reducer: { kwyzibo: createAppReducer(initialState) }

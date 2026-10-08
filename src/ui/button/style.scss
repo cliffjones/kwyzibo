@@ -6,7 +6,7 @@
   background: color.$ink;
   border-radius: size.$corner;
   border: 0;
-  color: color.$paper;
+  color: color.$card;
   cursor: pointer;
   font: inherit;
   font-weight: bold;
@@ -14,7 +14,7 @@
   line-height: 1;
   padding: 0 space.$mid;
 
-  &--minor {
+  &--text {
     background: none;
     color: inherit;
     font-weight: bold;

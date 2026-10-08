@@ -1,4 +1,4 @@
-export const DEFAULT_CUSTOM_DATA = `Example Topic
+export const CUSTOM_DATA_EXAMPLE = `Example Topic
 
 Question one?
 Answer one.

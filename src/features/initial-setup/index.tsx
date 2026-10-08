@@ -8,6 +8,7 @@ import { InputBox } from '../../ui/input-box';
 import { Option } from '../../ui/option';
 import { OptionList } from '../../ui/option/option-list';
 import { Card } from '../card';
+import { CUSTOM_DATA_EXAMPLE } from './constants';
 
 const selectAvailableTopics = createSelector(
   [(state: RootState) => state.kwyzibo.items],
@@ -52,7 +53,12 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
         </OptionList>
       ) : null}
 
-      <InputBox label="Custom quiz data:" value={customData} onChange={handleTextChange} />
+      <InputBox
+        label="Custom quiz data:"
+        placeholder={CUSTOM_DATA_EXAMPLE}
+        value={customData}
+        onChange={handleTextChange}
+      />
 
       <ButtonSet>
         <Button onClick={handleStartQuiz}>➤ Start</Button>

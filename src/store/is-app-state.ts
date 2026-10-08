@@ -7,6 +7,10 @@ export const isAppState = (value: unknown): value is AppState => {
   }
   const state = value as Record<string, unknown>;
 
+  if (typeof state.sourcePath !== 'string') {
+    return false;
+  }
+
   if (!Array.isArray(state.items) || !state.items.every(isQuizItem)) {
     return false;
   }
@@ -19,7 +23,7 @@ export const isAppState = (value: unknown): value is AppState => {
     return false;
   }
 
-  if (typeof state.sourcePath !== 'string') {
+  if (typeof state.darkMode !== 'boolean') {
     return false;
   }
 
