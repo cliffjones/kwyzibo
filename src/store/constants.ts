@@ -1,5 +1,6 @@
 export const STORAGE_KEY = 'kwyzibo';
-export const DATA_PATH = '/data/';
+export const BASE_URL = document.querySelector('base')?.getAttribute('href') ?? '/';
+export const DATA_PATH = `${BASE_URL}data/`;
 
 export const getStorageKey = (sourcePath: string) =>
   `${STORAGE_KEY}:${encodeURIComponent(sourcePath)}`;

@@ -53,15 +53,15 @@ describe('feature and application components', () => {
       </Provider>
     );
 
-    const toggle = screen.getByTitle('Switch to Dark Mode');
+    const toggle = screen.getByTitle('Switch to Light Mode');
     fireEvent.click(toggle);
 
-    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
-    expect(store.getState().kwyzibo.darkMode).toBe(true);
-    expect(JSON.parse(window.localStorage.getItem(getStorageKey('/test')) ?? '{}').darkMode).toBe(true);
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+    expect(store.getState().kwyzibo.darkMode).toBe(false);
+    expect(JSON.parse(window.localStorage.getItem(getStorageKey('/test')) ?? '{}').darkMode).toBe(false);
 
     const restoredStore = createAppStore('/test');
-    expect(restoredStore.getState().kwyzibo.darkMode).toBe(true);
+    expect(restoredStore.getState().kwyzibo.darkMode).toBe(false);
 
     unmount();
     render(
@@ -69,11 +69,11 @@ describe('feature and application components', () => {
         <Header confirmReset={jest.fn()} confirmingReset={false} />
       </Provider>
     );
-    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
-
-    fireEvent.click(screen.getByTitle('Switch to Light Mode'));
     expect(document.documentElement).toHaveAttribute('data-theme', 'light');
-    expect(restoredStore.getState().kwyzibo.darkMode).toBe(false);
+
+    fireEvent.click(screen.getByTitle('Switch to Dark Mode'));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(restoredStore.getState().kwyzibo.darkMode).toBe(true);
   });
 
   it('persists independent app state for each route', () => {
@@ -90,22 +90,22 @@ describe('feature and application components', () => {
 
     const scienceStore = createAppStore('/science');
     expect(scienceStore.getState().kwyzibo.customData).toBe('');
-    expect(scienceStore.getState().kwyzibo.darkMode).toBe(false);
+    expect(scienceStore.getState().kwyzibo.darkMode).toBe(true);
     scienceStore.dispatch(setCustomData('Science-specific quiz'));
-    scienceStore.dispatch(setDarkMode(true));
+    scienceStore.dispatch(setDarkMode(false));
 
     const mathStore = createAppStore('/math');
     expect(mathStore.getState().kwyzibo.customData).toBe('');
-    expect(mathStore.getState().kwyzibo.darkMode).toBe(false);
+    expect(mathStore.getState().kwyzibo.darkMode).toBe(true);
     mathStore.dispatch(setCustomData('Math-specific quiz'));
 
     const restoredScienceStore = createAppStore('/science');
     expect(restoredScienceStore.getState().kwyzibo.customData).toBe('Science-specific quiz');
-    expect(restoredScienceStore.getState().kwyzibo.darkMode).toBe(true);
+    expect(restoredScienceStore.getState().kwyzibo.darkMode).toBe(false);
 
     const restoredMathStore = createAppStore('/math');
     expect(restoredMathStore.getState().kwyzibo.customData).toBe('Math-specific quiz');
-    expect(restoredMathStore.getState().kwyzibo.darkMode).toBe(false);
+    expect(restoredMathStore.getState().kwyzibo.darkMode).toBe(true);
   });
 
   it('lists unique topics in order, updates selection, and starts the quiz', () => {
