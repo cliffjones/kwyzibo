@@ -12,8 +12,16 @@ import { CUSTOM_DATA_EXAMPLE } from './constants';
 
 const selectAvailableTopics = createSelector(
   [(state: RootState) => state.kwyzibo.items],
-  items => [...new Set(items.map(item => item.topic))]
-    .sort((left, right) => left.localeCompare(right))
+  items => [...new Set(items.map(item => item.topic))].sort((a, b) => a.localeCompare(b))
+);
+
+const selectItemCounts = createSelector(
+  [(state: RootState) => state.kwyzibo.items],
+  items =>
+    items.reduce<Record<string, number>>((counts, item) => {
+      counts[item.topic] = (counts[item.topic] ?? 0) + 1;
+      return counts;
+    }, {})
 );
 
 type InitialSetupProps = {
@@ -25,6 +33,7 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
   const dispatch = useDispatch<AppDispatch>();
 
   const availableTopics = useSelector(selectAvailableTopics);
+  const itemCounts = useSelector(selectItemCounts);
   const selectedTopics = useSelector((state: RootState) => state.kwyzibo.selectedTopics);
 
   const toggleTopic = (topic: string) => {
@@ -45,7 +54,8 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
           {availableTopics.map(topic => (
             <Option
               key={topic}
-              label={topic}
+              value={topic}
+              label={`${topic || 'Unspecified'} (${itemCounts[topic]})`}
               checked={selectedTopics.includes(topic)}
               onChange={() => toggleTopic(topic)}
             />

@@ -1,6 +1,7 @@
 {
   "files": [
     "test.kwyz",
+    "test-compact.kwyz",
     "test-json.kwyz"
   ]
 }

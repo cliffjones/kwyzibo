@@ -21,7 +21,7 @@ const createInitialState = (
   loadedItems: QuizItem[] = [],
   customData = '',
   initializing = true,
-  darkMode = false
+  darkMode = true
 ): AppState => {
   const items = loadedItems.map((item, index) => ({ ...item, id: index }));
   if (!initializing) {

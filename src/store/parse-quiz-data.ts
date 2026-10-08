@@ -1,6 +1,17 @@
 import { isQuizData } from './is-quiz-data';
 import { QuizData } from './types';
 
+const normalizeData = (data: string) => {
+  const normalData = data.replaceAll('\r', '');
+
+  if (!normalData.includes('\t')) {
+    return normalData;
+  }
+
+  // If the data contains tab characters, convert it from compact mode.
+  return normalData.replaceAll('\n', '\n\n').replaceAll('\t', '\n');
+};
+
 export const parseQuizData = (data: string): QuizData[] => {
   // If the data looks like JSON, treat it as such.
   if (data.trimStart().startsWith('[')) {
@@ -10,8 +21,8 @@ export const parseQuizData = (data: string): QuizData[] => {
     }
   }
 
-  const blocks = data
-    .split(/\r?\n/)
+  const blocks = normalizeData(data)
+    .split('\n')
     .reduce<string[][]>((result, line) => {
       if (line.trim() === '') {
         if (result[result.length - 1]?.length) {

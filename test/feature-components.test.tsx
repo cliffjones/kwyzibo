@@ -120,10 +120,10 @@ describe('feature and application components', () => {
     );
 
     expect(screen.getAllByRole('checkbox').map(option => option.getAttribute('aria-label') ?? option.parentElement?.textContent))
-      .toEqual(['Alpha', 'Zulu']);
+      .toEqual(['Alpha (2)', 'Zulu (1)']);
     expect(screen.getByLabelText('Custom quiz data:')).toHaveValue('custom quiz');
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Alpha' }));
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Alpha (2)' }));
     fireEvent.change(screen.getByLabelText('Custom quiz data:'), {
       target: { value: 'updated quiz' }
     });
