@@ -113,7 +113,7 @@ const createAppReducer = (initialState: AppState) => {
 };
 
 export const createAppStore = (sourcePath = '/', items: QuizItem[] = []) => {
-  const savedState = loadPersistedState();
+  const savedState = loadPersistedState(sourcePath);
   const restoredState = savedState?.sourcePath === sourcePath
     ? { ...savedState, sourcePath }
     : null;

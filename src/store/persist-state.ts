@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from './constants';
+import { getStorageKey } from './constants';
 import { AppState } from './types';
 
 export const persistState = (state: AppState) => {
@@ -7,7 +7,7 @@ export const persistState = (state: AppState) => {
   }
 
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    window.localStorage.setItem(getStorageKey(state.sourcePath), JSON.stringify(state));
   } catch (error) {
     console.error('Unable to save quiz state.', error);
   }

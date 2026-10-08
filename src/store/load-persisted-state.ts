@@ -1,14 +1,14 @@
-import { STORAGE_KEY } from './constants';
+import { getStorageKey } from './constants';
 import { isAppState } from './is-app-state';
 import { AppState } from './types';
 
-export const loadPersistedState = (): AppState | null => {
+export const loadPersistedState = (sourcePath: string): AppState | null => {
   if (typeof window === 'undefined') {
     return null;
   }
 
   try {
-    const serializedState = window.localStorage.getItem(STORAGE_KEY);
+    const serializedState = window.localStorage.getItem(getStorageKey(sourcePath));
     if (serializedState == null) {
       return null;
     }

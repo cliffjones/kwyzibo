@@ -5,6 +5,7 @@ import { Header } from '../src/features/header';
 import { InitialSetup } from '../src/features/initial-setup';
 import { CUSTOM_DATA_EXAMPLE } from '../src/features/initial-setup/constants';
 import { createAppStore, rateConfidence, setCustomData, setDarkMode, startQuiz } from '../src/store';
+import { getStorageKey } from '../src/store/constants';
 import { loadItems } from '../src/store/load-items';
 import type { QuizItem } from '../src/store/types';
 
@@ -57,7 +58,7 @@ describe('feature and application components', () => {
 
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
     expect(store.getState().kwyzibo.darkMode).toBe(true);
-    expect(JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}').darkMode).toBe(true);
+    expect(JSON.parse(window.localStorage.getItem(getStorageKey('/test')) ?? '{}').darkMode).toBe(true);
 
     const restoredStore = createAppStore('/test');
     expect(restoredStore.getState().kwyzibo.darkMode).toBe(true);
@@ -75,16 +76,36 @@ describe('feature and application components', () => {
     expect(restoredStore.getState().kwyzibo.darkMode).toBe(false);
   });
 
-  it('restores saved state without a darkMode field as light mode', () => {
-    createAppStore('/test');
-    const savedState = JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}');
-    delete savedState.darkMode;
-    window.localStorage.setItem('kwyzibo', JSON.stringify(savedState));
+  it('persists independent app state for each route', () => {
+    window.localStorage.setItem('kwyzibo', JSON.stringify({
+      sourcePath: '/science',
+      items: [],
+      customData: 'legacy shared quiz',
+      initializing: true,
+      darkMode: true,
+      selectedTopics: [],
+      remainingIds: [],
+      currentId: null
+    }));
 
-    const store = createAppStore('/test');
+    const scienceStore = createAppStore('/science');
+    expect(scienceStore.getState().kwyzibo.customData).toBe('');
+    expect(scienceStore.getState().kwyzibo.darkMode).toBe(false);
+    scienceStore.dispatch(setCustomData('Science-specific quiz'));
+    scienceStore.dispatch(setDarkMode(true));
 
-    expect(store.getState().kwyzibo.darkMode).toBe(false);
-    expect(JSON.parse(window.localStorage.getItem('kwyzibo') ?? '{}').darkMode).toBe(false);
+    const mathStore = createAppStore('/math');
+    expect(mathStore.getState().kwyzibo.customData).toBe('');
+    expect(mathStore.getState().kwyzibo.darkMode).toBe(false);
+    mathStore.dispatch(setCustomData('Math-specific quiz'));
+
+    const restoredScienceStore = createAppStore('/science');
+    expect(restoredScienceStore.getState().kwyzibo.customData).toBe('Science-specific quiz');
+    expect(restoredScienceStore.getState().kwyzibo.darkMode).toBe(true);
+
+    const restoredMathStore = createAppStore('/math');
+    expect(restoredMathStore.getState().kwyzibo.customData).toBe('Math-specific quiz');
+    expect(restoredMathStore.getState().kwyzibo.darkMode).toBe(false);
   });
 
   it('lists unique topics in order, updates selection, and starts the quiz', () => {
