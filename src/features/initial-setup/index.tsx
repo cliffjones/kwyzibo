@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, selectTopics, startQuiz } from '../../store';
 import { Button } from '../../ui/button';
 import { ButtonSet } from '../../ui/button/button-set';
+import { Icon } from '../../ui/icon';
 import { InputBox } from '../../ui/input-box';
 import { Option } from '../../ui/option';
 import { OptionList } from '../../ui/option/option-list';
@@ -71,7 +72,10 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
       />
 
       <ButtonSet>
-        <Button onClick={handleStartQuiz}>➤ Start</Button>
+        <Button onClick={handleStartQuiz}>
+          <Icon name="point-right" />
+          Start
+        </Button>
       </ButtonSet>
     </Card>
   );

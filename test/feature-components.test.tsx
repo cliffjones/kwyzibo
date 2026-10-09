@@ -119,7 +119,7 @@ describe('feature and application components', () => {
       </Provider>
     );
 
-    expect(screen.getAllByRole('checkbox').map(option => option.getAttribute('aria-label') ?? option.parentElement?.textContent))
+    expect(screen.getAllByRole('checkbox').map(option => option.parentElement?.textContent))
       .toEqual(['Alpha (2)', 'Zulu (1)']);
     expect(screen.getByLabelText('Custom quiz data:')).toHaveValue('custom quiz');
 
@@ -130,7 +130,7 @@ describe('feature and application components', () => {
     expect(store.getState().kwyzibo.selectedTopics).toEqual(['Zulu']);
     expect(handleTextChange).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByRole('button', { name: '➤ Start' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start' }));
     expect(store.getState().kwyzibo.initializing).toBe(false);
     expect(store.getState().kwyzibo.items.map(item => item.topic)).toEqual(['Zulu']);
   });
@@ -145,11 +145,11 @@ describe('feature and application components', () => {
       </Provider>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '➤ Start' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start' }));
     expect(screen.getByText(/Question (one|two)\?/)).toBeInTheDocument();
     expect(screen.queryByText('Answer one.')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '▼ Reveal' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reveal' }));
     expect(screen.getByText(/Answer (one|two)\./)).toBeInTheDocument();
 
     const currentId = store.getState().kwyzibo.currentId;
@@ -159,7 +159,7 @@ describe('feature and application components', () => {
 
     expect(store.getState().kwyzibo.remainingIds).toHaveLength(1);
     expect(screen.queryByText(answer ?? '')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '▼ Reveal' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reveal' })).toBeInTheDocument();
   });
 
   it('renders the reset confirmation and dispatches reset when accepted', async () => {
@@ -179,7 +179,7 @@ describe('feature and application components', () => {
     fireEvent.click(screen.getByTitle('Reset'));
     expect(screen.getByText('Really reset the quiz?')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '✔ Yes' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
     expect(await screen.findByText('What do you want to learn today?')).toBeInTheDocument();
     expect(mockedLoadItems).toHaveBeenCalledWith('/test');
     expect(store.getState().kwyzibo.darkMode).toBe(true);

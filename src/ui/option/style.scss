@@ -3,8 +3,10 @@
 
 .option {
   align-items: center;
+  cursor: pointer;
   display: flex;
   gap: space.$tiny;
+  margin-right: auto;
 }
 
 .option-list {

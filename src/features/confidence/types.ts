@@ -1,4 +1,6 @@
+import type { IconName } from '../../ui/icon/types';
+
 export type ConfidenceRating = {
-  icon: string;
+  icon: IconName;
   label: string;
 };

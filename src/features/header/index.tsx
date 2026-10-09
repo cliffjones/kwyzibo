@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDarkMode, type AppDispatch, type RootState } from '../../store';
 import { Button } from '../../ui/button';
+import { Icon } from '../../ui/icon';
 import './style.scss';
 
 type HeaderProps = {
@@ -36,14 +37,18 @@ export const Header = ({ confirmReset, confirmingReset }: HeaderProps) => {
           className="button--text"
           onClick={() => dispatch(setDarkMode(!darkMode))}
           title={`Switch to ${darkMode ? 'Light' : 'Dark'} Mode`}
-        >{darkMode ? '☀' : '⏾'}</Button>
+        ><Icon name={darkMode ? 'sun' : 'moon'} /></Button>
       </div>
 
       {initializing ? null : (
         <div className="header-info">
           {remainingMessage}
           {confirmingReset || !remainingIds.length ? null : (
-            <Button className="button--text" onClick={confirmReset} title="Reset">⭯</Button>
+            <Button
+              className="button--text"
+              onClick={confirmReset}
+              title="Reset"
+            ><Icon name="reset" /></Button>
           )}
         </div>
       )}

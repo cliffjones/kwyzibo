@@ -15,6 +15,7 @@ import {
 import './style/index.scss';
 import { Button } from './ui/button';
 import { ButtonSet } from './ui/button/button-set';
+import { Icon } from './ui/icon';
 
 export const App = ({ path }: { path: string }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -70,15 +71,24 @@ export const App = ({ path }: { path: string }) => {
       ) : confirmingReset ? (
         <Card message="Really reset the quiz?">
           <ButtonSet>
-            <Button className="button--yes" onClick={handleReset}>✔ Yes</Button>
-            <Button className="button--no" onClick={cancelReset}>✘ No</Button>
+            <Button className="button--yes" onClick={handleReset}>
+              <Icon name="check" />
+              Yes
+            </Button>
+            <Button className="button--no" onClick={cancelReset}>
+              <Icon name="x" />
+              No
+            </Button>
           </ButtonSet>
         </Card>
       ) : remainingIds.length && currentItem ? (<>
         <Card topic={currentItem.topic} content={currentItem.question}>
           {!revealed ? (
             <ButtonSet>
-              <Button onClick={handleReveal}>▼ Reveal</Button>
+              <Button onClick={handleReveal}>
+                <Icon name="point-down" />
+                Reveal
+              </Button>
             </ButtonSet>
           ) : null}
         </Card>
@@ -91,7 +101,10 @@ export const App = ({ path }: { path: string }) => {
       </>) : (
         <Card message="You’ve got this.">
           <ButtonSet>
-            <Button onClick={handleReset}>⭯ Reset</Button>
+            <Button onClick={handleReset}>
+              <Icon name="reset" />
+              Reset
+            </Button>
           </ButtonSet>
         </Card>
       )}

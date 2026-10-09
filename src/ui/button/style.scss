@@ -3,16 +3,25 @@
 @use '../../style/space';
 
 .button {
+  align-items: center;
   background: color.$ink;
   border-radius: size.$corner;
   border: 0;
   color: color.$card;
   cursor: pointer;
+  display: flex;
   font: inherit;
   font-weight: bold;
+  gap: space.$tiny;
   height: size.$button;
   line-height: 1;
   padding: 0 space.$mid;
+
+  .icon {
+    display: inline-block;
+    height: size.$text;
+    width: size.$text;
+  }
 
   &--text {
     background: none;
@@ -24,10 +33,15 @@
   }
 
   &--rating {
-    border-radius: size.$button;
-    font-size: size.$icon;
-    padding: 0 0 space.$tiny;
-    width: size.$button;
+    border-radius: size.$icon;
+    height: size.$icon;
+    padding: 0;
+    width: size.$icon;
+
+    .icon {
+      height: 100%;
+      width: 100%;
+    }
   }
 
   &--no {

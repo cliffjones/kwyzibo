@@ -63,10 +63,10 @@ describe('UI and display components', () => {
   });
 
   it.each([
-    ['No.', 1],
-    ['Not really.', 2],
-    ['Kind of.', 3],
-    ['Pretty much.', 4],
+    ['No', 1],
+    ['Not Really', 2],
+    ['Kind Of', 3],
+    ['Pretty Much', 4],
     ['Yes!', 5]
   ])('reports the selected confidence rating "%s"', (label, rating) => {
     const handleRating = jest.fn();
