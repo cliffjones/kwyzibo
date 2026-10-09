@@ -11,11 +11,15 @@ const apacheSpaFallback = {
       type: 'asset',
       fileName: '.htaccess',
       source: [
+        'Options -Indexes',
         'DirectoryIndex index.html',
         'RewriteEngine On',
         `RewriteBase ${base}`,
-        'RewriteCond %{REQUEST_FILENAME} -f [OR]',
-        'RewriteCond %{REQUEST_FILENAME} -d',
+        'RewriteRule ^data/?$ index.html [L]',
+        'RewriteCond %{REQUEST_FILENAME} -f',
+        'RewriteRule ^data/[^/]+\\.kwyz$ - [L]',
+        'RewriteRule ^data/ - [F,L]',
+        'RewriteCond %{REQUEST_FILENAME} -f',
         'RewriteRule ^ - [L]',
         'RewriteRule ^ index.html [L]'
       ].join('\n')

@@ -1,7 +1,3 @@
-export type QuizManifest = {
-  files: string[];
-};
-
 export type QuizData = {
   question: string;
   answer: string;
