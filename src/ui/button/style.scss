@@ -17,6 +17,11 @@
   line-height: 1;
   padding: 0 space.$mid;
 
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   .icon {
     display: inline-block;
     height: size.$text;
@@ -34,6 +39,7 @@
 
   &--rating {
     border-radius: size.$icon;
+    color: color.$icon-ink;
     height: size.$icon;
     padding: 0;
     width: size.$icon;

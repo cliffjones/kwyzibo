@@ -72,7 +72,10 @@ export const InitialSetup = ({ customData, handleTextChange }: InitialSetupProps
       />
 
       <ButtonSet>
-        <Button onClick={handleStartQuiz}>
+        <Button
+          disabled={!selectedTopics.length && !customData}
+          onClick={handleStartQuiz}
+        >
           <Icon name="point-right" />
           Start
         </Button>

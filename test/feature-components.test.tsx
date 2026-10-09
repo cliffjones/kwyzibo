@@ -122,6 +122,7 @@ describe('feature and application components', () => {
     expect(screen.getAllByRole('checkbox').map(option => option.parentElement?.textContent))
       .toEqual(['Alpha (2)', 'Zulu (1)']);
     expect(screen.getByLabelText('Custom quiz data:')).toHaveValue('custom quiz');
+    expect(screen.getByRole('button', { name: 'Start' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('checkbox', { name: 'Alpha (2)' }));
     fireEvent.change(screen.getByLabelText('Custom quiz data:'), {
@@ -133,6 +134,26 @@ describe('feature and application components', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Start' }));
     expect(store.getState().kwyzibo.initializing).toBe(false);
     expect(store.getState().kwyzibo.items.map(item => item.topic)).toEqual(['Zulu']);
+  });
+
+  it('disables Start only when custom data and available topics are both empty', () => {
+    const store = createAppStore('/empty');
+    const handleTextChange = jest.fn();
+    const { rerender } = render(
+      <Provider store={store}>
+        <InitialSetup customData="" handleTextChange={handleTextChange} />
+      </Provider>
+    );
+
+    expect(screen.getByRole('button', { name: 'Start' })).toBeDisabled();
+
+    rerender(
+      <Provider store={store}>
+        <InitialSetup customData="A custom quiz" handleTextChange={handleTextChange} />
+      </Provider>
+    );
+
+    expect(screen.getByRole('button', { name: 'Start' })).toBeEnabled();
   });
 
   it('starts a quiz, reveals an answer, and advances after a confident rating', () => {
